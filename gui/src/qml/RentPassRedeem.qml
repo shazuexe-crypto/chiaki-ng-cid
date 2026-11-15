@@ -16,7 +16,7 @@ Item {
 
     // Emitted when the server accepts the code. The caller (Main.qml) shows
     // the RentPass main view and stores these for the timer + authorize step.
-    signal redeemSuccess(string sessionToken, int durationMinutes, real expiresAt, int timeRemainingSeconds, string gameLabel)
+    signal redeemSuccess(string sessionToken, int durationMinutes, real expiresAt, int timeRemainingSeconds, string gameLabel, string slotStartIst, string slotEndIst)
     signal redeemFailed(string message)
 
     property string apiUrl: "https://api.rentpass.store/api/v1/rentpass/redeem"
@@ -134,10 +134,30 @@ Item {
                                 dur,
                                 parseFloat(resp.expires_at) || 0,
                                 parseInt(resp.time_remaining_seconds) || dur * 60,
-                                resp.game_label || "RentPass GTA 5 Online")
+                                resp.game_label || "RentPass GTA 5 Online",
+                                resp.slot_start_ist || "",
+                                resp.slot_end_ist || "")
                         } else {
-                            root.showError(resp.error || "This code is not valid.")
-                            root.redeemFailed(resp.error || "This code is not valid.")
+                            // Slot codes: the server sends a full sentence in
+                            // "message" ("Your slot starts at ... IST. You can
+                            // play then." / "Your slot has ended."). Show that,
+                            // never the raw error code ("too_early").
+                            var msg = resp.message || ""
+                            var isInfo = false
+                            if (!msg) {
+                                if (resp.error === "too_early") {
+                                    msg = "Your slot starts at " + (resp.slot_start_ist || "") + ". You can play then."
+                                    isInfo = true
+                                } else if (resp.error === "slot_expired") {
+                                    msg = "Your slot has ended."
+                                } else {
+                                    msg = resp.error || "This code is not valid."
+                                }
+                            } else if (resp.error === "too_early") {
+                                isInfo = true
+                            }
+                            root.showError(msg, isInfo)
+                            root.redeemFailed(msg)
                         }
                     } catch (e) {
                         root.showError("Server error, please try again.")
@@ -163,7 +183,9 @@ Item {
         xhr.send(payload)
     }
 
-    function showError(msg) {
+    // isInfo (amber) is for "not yet" slot messages; real errors stay red.
+    function showError(msg, isInfo) {
         errorLabel.text = msg
+        errorLabel.color = isInfo ? "#ffb020" : "#ff5555"
     }
 }
