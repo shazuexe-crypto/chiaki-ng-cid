@@ -206,7 +206,7 @@ Item {
                 try {
                     var resp = JSON.parse(xhr.responseText)
                     if (resp.allowed === false)
-                        root.onRentPassSessionEnded()
+                        root.onRentPassSessionEnded(resp.error || "")
                 } catch (e) { /* ignore, retry next tick */ }
             }
             // Non-200 / network error: ignore, retry next tick.
