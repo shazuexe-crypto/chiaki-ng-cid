@@ -80,15 +80,20 @@ Item {
             }
 
             // --- The one and only game card ---
+            // Height follows its content: the slot label and the
+            // "Finding your console..." row come and go, and the old
+            // fixed 130px clipped the Play button and made the
+            // "Session time left" label below jump up and down.
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 130
+                Layout.preferredHeight: cardLayout.implicitHeight + 28
                 radius: 16
                 color: "#1a1a2e"
                 border.color: "#6b4fd8"
                 border.width: 2
 
                 ColumnLayout {
+                    id: cardLayout
                     anchors.fill: parent
                     anchors.margins: 14
                     spacing: 8
@@ -129,13 +134,19 @@ Item {
                         onClicked: doAuthorizeAndPlay()
                     }
 
-                    Label {
-                        // Shown while the console is still being found.
-                        text: "Finding your console..."
-                        font.pixelSize: 12
-                        color: "#888888"
-                        Layout.alignment: Qt.AlignHCenter
-                        visible: !root.busy && findHostIndex() < 0
+                    // Reserved row: keeps its height even while the text
+                    // is hidden, so the card (and the timing label below
+                    // it) never shifts when the console is found.
+                    Item {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 15
+                        Label {
+                            anchors.centerIn: parent
+                            text: "Finding your console..."
+                            font.pixelSize: 12
+                            color: "#888888"
+                            visible: !root.busy && findHostIndex() < 0
+                        }
                     }
                 }
             }
