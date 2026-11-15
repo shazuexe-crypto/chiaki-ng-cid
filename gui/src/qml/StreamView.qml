@@ -1003,9 +1003,20 @@ Item {
         }
     }
 
+    // RentPass: gives the disconnect a moment to reach the console
+    // before the app quits, so Yes on the close dialog never leaves
+    // a half-open session behind.
+    Timer {
+        id: rentPassQuitTimer
+        interval: 900
+        repeat: false
+        onTriggered: Qt.quit()
+    }
+
     Popup {
         id: sessionStopDialog
         property int closeAction: 0
+        property bool quitAppAfterStop: false
         parent: Overlay.overlay
         x: Math.round((root.width - width) / 2)
         y: Math.round((root.height - height) / 2)
@@ -1013,6 +1024,7 @@ Item {
         padding: 30
         onAboutToShow: {
             closeAction = 0;
+            quitAppAfterStop = false;
             sessionStopDialogActive = true;
             view.updateOverlayInteractionActive();
         }
@@ -1020,14 +1032,19 @@ Item {
             view.releaseInput();
             sessionStopDialogActive = false;
             view.updateOverlayInteractionActive();
-            if (closeAction)
-                Chiaki.stopSession(closeAction == 1);
+            if (closeAction) {
+                // RentPass: never sleep the console. Yes disconnects
+                // without sleep, then the whole app closes.
+                Chiaki.stopSession(false);
+                if (quitAppAfterStop)
+                    rentPassQuitTimer.start();
+            }
         }
 
         ColumnLayout {
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Disconnect Session")
+                text: qsTr("Close RentPass App")
                 font.bold: true
                 font.pixelSize: 24
             }
@@ -1035,7 +1052,7 @@ Item {
             Label {
                 Layout.topMargin: 10
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Do you want the Console to go into sleep mode?")
+                text: qsTr("Do you want to close the RentPass app?")
                 font.pixelSize: 20
             }
 
@@ -1045,20 +1062,21 @@ Item {
                 spacing: 30
 
                 Button {
-                    id: sleepButton
+                    id: yesButton
                     Layout.preferredWidth: 200
                     Layout.minimumHeight: 80
                     Layout.maximumHeight: 80
-                    text: qsTr("Sleep")
+                    text: qsTr("Yes")
                     font.pixelSize: 24
                     Material.roundedScale: Material.SmallScale
                     Material.background: activeFocus ? parent.Material.accent : undefined
                     KeyNavigation.right: noButton
                     Keys.onReturnPressed: clicked()
                     Keys.onEscapePressed: sessionStopDialog.close()
-                    onVisibleChanged: if (visible) view.grabInput(sleepButton)
+                    onVisibleChanged: if (visible) view.grabInput(yesButton)
                     onClicked: {
-                        sessionStopDialog.closeAction = 1;
+                        sessionStopDialog.closeAction = 2;
+                        sessionStopDialog.quitAppAfterStop = true;
                         sessionStopDialog.close();
                     }
                 }
@@ -1072,11 +1090,12 @@ Item {
                     font.pixelSize: 24
                     Material.roundedScale: Material.SmallScale
                     Material.background: activeFocus ? parent.Material.accent : undefined
-                    KeyNavigation.left: sleepButton
+                    KeyNavigation.left: yesButton
                     Keys.onReturnPressed: clicked()
                     Keys.onEscapePressed: sessionStopDialog.close()
                     onClicked: {
-                        sessionStopDialog.closeAction = 2;
+                        // No: nothing happens, the game keeps running.
+                        sessionStopDialog.closeAction = 0;
                         sessionStopDialog.close();
                     }
                 }
@@ -1087,6 +1106,7 @@ Item {
     Window {
         id: separateSessionStopWindow
         property int closeAction: 0
+        property bool quitAppAfterStop: false
         readonly property int dialogWidth: 700
         readonly property int dialogHeight: 260
         visible: false
@@ -1102,13 +1122,19 @@ Item {
         onVisibleChanged: {
             if (visible) {
                 closeAction = 0;
+                quitAppAfterStop = false;
                 view.updateSeparateDialogGeometry(width, height);
                 requestActivate();
-                view.grabInput(separateSleepButton);
+                view.grabInput(separateYesButton);
             } else {
                 view.releaseInput();
-                if (closeAction)
-                    Chiaki.stopSession(closeAction === 1);
+                if (closeAction) {
+                    // RentPass: never sleep the console. Yes disconnects
+                    // without sleep, then the whole app closes.
+                    Chiaki.stopSession(false);
+                    if (quitAppAfterStop)
+                        rentPassQuitTimer.start();
+                }
             }
             view.updateOverlayInteractionActive();
         }
@@ -1126,7 +1152,7 @@ Item {
 
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Disconnect Session")
+                text: qsTr("Close RentPass App")
                 font.bold: true
                 font.pixelSize: 24
             }
@@ -1134,7 +1160,7 @@ Item {
             Label {
                 Layout.topMargin: 10
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Do you want the Console to go into sleep mode?")
+                text: qsTr("Do you want to close the RentPass app?")
                 font.pixelSize: 20
             }
 
@@ -1144,11 +1170,11 @@ Item {
                 spacing: 30
 
                 Button {
-                    id: separateSleepButton
+                    id: separateYesButton
                     Layout.preferredWidth: 200
                     Layout.minimumHeight: 80
                     Layout.maximumHeight: 80
-                    text: qsTr("Sleep")
+                    text: qsTr("Yes")
                     font.pixelSize: 24
                     Material.roundedScale: Material.SmallScale
                     Material.background: activeFocus ? parent.Material.accent : undefined
@@ -1156,7 +1182,8 @@ Item {
                     Keys.onReturnPressed: clicked()
                     Keys.onEscapePressed: separateSessionStopWindow.visible = false
                     onClicked: {
-                        separateSessionStopWindow.closeAction = 1;
+                        separateSessionStopWindow.closeAction = 2;
+                        separateSessionStopWindow.quitAppAfterStop = true;
                         separateSessionStopWindow.visible = false;
                     }
                 }
@@ -1170,11 +1197,12 @@ Item {
                     font.pixelSize: 24
                     Material.roundedScale: Material.SmallScale
                     Material.background: activeFocus ? parent.Material.accent : undefined
-                    KeyNavigation.left: separateSleepButton
+                    KeyNavigation.left: separateYesButton
                     Keys.onReturnPressed: clicked()
                     Keys.onEscapePressed: separateSessionStopWindow.visible = false
                     onClicked: {
-                        separateSessionStopWindow.closeAction = 2;
+                        // No: nothing happens, the game keeps running.
+                        separateSessionStopWindow.closeAction = 0;
                         separateSessionStopWindow.visible = false;
                     }
                 }
