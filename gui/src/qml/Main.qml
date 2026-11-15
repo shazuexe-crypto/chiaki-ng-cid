@@ -20,6 +20,13 @@ Item {
     property string rentPassGameLabel: "RentPass GTA 5 Online"
     property int rentPassTimeRemaining: 0
     property bool rentPassSessionEnded: false
+    // RentPass: slot window of the redeemed code (IST display strings from
+    // the server, e.g. "15 Nov 2026, 01:00 PM IST"). Empty for non-slot codes.
+    property string rentPassSlotStartIst: ""
+    property string rentPassSlotEndIst: ""
+    // RentPass: why the session ended ("Your slot has ended." etc.), shown
+    // on the session-ended screen when the server gave a reason.
+    property string rentPassSessionEndReason: ""
     // RentPass: true once the post-redeem server-config fetch has settled
     // (server config imported, or bundled fallback used). Guards the
     // MainView against being shown twice (signal + safety timer).
@@ -29,10 +36,12 @@ Item {
     // server denies the session). Stops the stream, deletes the config file
     // and wipes the settings (Chiaki.rentPassExpireAndCleanup), shows the
     // "session ended" screen, then quits the app.
-    function onRentPassSessionEnded() {
+    function onRentPassSessionEnded(reason) {
         if (rentPassSessionEnded)
             return
         rentPassSessionEnded = true
+        if (reason)
+            rentPassSessionEndReason = reason
         Chiaki.rentPassExpireAndCleanup()
         rentPassSessionEndedQuitTimer.start()
     }
@@ -385,6 +394,17 @@ Item {
                 color: "#96a6fd"
                 Layout.alignment: Qt.AlignHCenter
             }
+
+            Label {
+                text: root.rentPassSessionEndReason
+                font.pixelSize: 14
+                color: "#ffb020"
+                Layout.alignment: Qt.AlignHCenter
+                visible: root.rentPassSessionEndReason !== ""
+                wrapMode: Text.Wrap
+                horizontalAlignment: Text.AlignHCenter
+                Layout.fillWidth: true
+            }
         }
     }
 
@@ -696,10 +716,12 @@ Item {
     Component {
         id: redeemViewComponent
         RentPassRedeem {
-            onRedeemSuccess: function(sessionToken, durationMinutes, expiresAt, timeRemainingSeconds, gameLabel) {
+            onRedeemSuccess: function(sessionToken, durationMinutes, expiresAt, timeRemainingSeconds, gameLabel, slotStartIst, slotEndIst) {
                 root.rentPassSessionToken = sessionToken
                 root.rentPassGameLabel = gameLabel
                 root.rentPassTimeRemaining = timeRemainingSeconds
+                root.rentPassSlotStartIst = slotStartIst || ""
+                root.rentPassSlotEndIst = slotEndIst || ""
                 // RentPass: fetch the current settings file from the server
                 // and import it (bundled config is the fallback). The game
                 // card appears when rentPassConfigReady fires, or after
@@ -725,6 +747,8 @@ Item {
             sessionToken: root.rentPassSessionToken
             gameLabel: root.rentPassGameLabel
             timeRemaining: root.rentPassTimeRemaining
+            slotStartIst: root.rentPassSlotStartIst
+            slotEndIst: root.rentPassSlotEndIst
         }
     }
 
