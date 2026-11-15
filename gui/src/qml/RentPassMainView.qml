@@ -24,6 +24,10 @@ Item {
     property string sessionToken: ""
     property string gameLabel: "RentPass GTA 5 Online"
     property int timeRemaining: 0        // seconds, counts down while here
+    // Slot window of the redeemed code (IST strings from the server).
+    // Empty for non-slot codes, and the label stays hidden then.
+    property string slotStartIst: ""
+    property string slotEndIst: ""
 
     // The nickname of the pre-configured console (from the installed config).
     // Matched against Chiaki.hosts modelData.name. Change this if the
@@ -103,6 +107,17 @@ Item {
                         font.pixelSize: 13
                         color: "#96a6fd"
                         Layout.alignment: Qt.AlignHCenter
+                    }
+
+                    Label {
+                        text: "Your slot: " + root.slotStartIst + " – " + root.slotEndIst
+                        font.pixelSize: 12
+                        color: "#96a6fd"
+                        Layout.alignment: Qt.AlignHCenter
+                        wrapMode: Text.Wrap
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        visible: root.slotStartIst !== ""
                     }
 
                     Button {
