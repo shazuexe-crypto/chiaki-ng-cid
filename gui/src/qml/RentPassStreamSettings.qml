@@ -1,7 +1,7 @@
 // RentPassStreamSettings.qml — stream settings after a valid redeem,
 // before Play. (Renamed from the old quality picker: the premade
 // quality presets are gone.) This is the stock Chiaki "Stream" settings
-// (resolution, frame rate, bitrate, codec), shown after redeem so the
+// (resolution, frame rate, bitrate), shown after redeem so the
 // customer picks what runs best on their own device — especially a
 // low-end laptop. There is no premade quality preset here: the controls
 // write straight to the same settings the stream reads (Chiaki.settings,
@@ -11,7 +11,8 @@
 // This screen is part of the redeem flow only — there is no settings
 // menu anywhere else. ALL text is English.
 // RentPass: only 720p / 1080p resolutions, bitrate defaults to 8 Mbps
-// and never goes below 8, codec is H264 only. The layout is compact and
+// and never goes below 8. Codec is fixed to H264 in code and the selector
+// is hidden. The layout is compact and
 // centred so the Continue button stays visible on small screens.
 
 import QtQuick
@@ -78,7 +79,7 @@ Item {
             }
 
             Label {
-                text: "Choose the resolution, frame rate, bitrate and codec that run best on your laptop."
+                text: "Choose the resolution, frame rate and bitrate that run best on your laptop."
                 font.pixelSize: 13
                 color: "#96a6fd"
                 Layout.alignment: Qt.AlignHCenter
@@ -183,6 +184,7 @@ Item {
             }
 
             Label {
+                visible: false
                 text: "Codec"
                 font.pixelSize: 15
                 font.bold: true
@@ -192,6 +194,7 @@ Item {
             }
 
             ComboBox {
+                visible: false
                 Layout.fillWidth: true
                 // RentPass: H264 only (codec 0). H265 and H265 HDR are
                 // removed — H264 looks best on most laptops.
@@ -204,6 +207,7 @@ Item {
             }
 
             Label {
+                visible: false
                 text: "H264 looks best on most laptops."
                 font.pixelSize: 11
                 color: "#888888"
