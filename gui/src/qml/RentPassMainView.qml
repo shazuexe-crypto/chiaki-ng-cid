@@ -38,7 +38,7 @@ Item {
     property bool busy: false
 
     Material.theme: Material.Dark
-    Material.accent: "#96a6fd"
+    Material.accent: "#FAD200"
 
     function formatTime(seconds) {
         var s = Math.max(0, seconds)
@@ -89,7 +89,7 @@ Item {
                 Layout.preferredHeight: cardLayout.implicitHeight + 28
                 radius: 16
                 color: "#1a1a2e"
-                border.color: "#6b4fd8"
+                border.color: "#FF1E27"
                 border.width: 2
 
                 ColumnLayout {
@@ -110,14 +110,14 @@ Item {
                         id: statusLabel
                         text: root.busy ? "Connecting..." : "Ready to play"
                         font.pixelSize: 13
-                        color: "#96a6fd"
+                        color: "#FAD200"
                         Layout.alignment: Qt.AlignHCenter
                     }
 
                     Label {
                         text: "Your slot: " + root.slotStartIst + " – " + root.slotEndIst
                         font.pixelSize: 12
-                        color: "#96a6fd"
+                        color: "#FAD200"
                         Layout.alignment: Qt.AlignHCenter
                         wrapMode: Text.Wrap
                         horizontalAlignment: Text.AlignHCenter
@@ -129,7 +129,7 @@ Item {
                         id: playButton
                         text: root.busy ? "Please wait..." : "Play"
                         Layout.fillWidth: true
-                        Material.background: "#6b4fd8"
+                        Material.background: "#FF1E27"
                         enabled: !root.busy && root.sessionToken !== "" && findHostIndex() >= 0
                         onClicked: doAuthorizeAndPlay()
                     }

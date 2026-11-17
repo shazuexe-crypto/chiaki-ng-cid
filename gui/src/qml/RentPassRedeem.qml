@@ -23,7 +23,7 @@ Item {
     property bool busy: false
 
     Material.theme: Material.Dark
-    Material.accent: "#96a6fd"
+    Material.accent: "#FAD200"
 
     Rectangle {
         anchors.fill: parent
@@ -47,7 +47,7 @@ Item {
             Label {
                 text: "Enter your redeem code to start playing"
                 font.pixelSize: 14
-                color: "#96a6fd"
+                color: "#FAD200"
                 Layout.alignment: Qt.AlignHCenter
             }
 
@@ -55,7 +55,7 @@ Item {
                 id: codeField
                 placeholderText: "ABCD-EFGH-IJKL"
                 Layout.fillWidth: true
-                Material.accent: "#96a6fd"
+                Material.accent: "#FAD200"
                 enabled: !root.busy
                 font.pixelSize: 18
                 font.capitalization: Font.AllUppercase
@@ -100,7 +100,7 @@ Item {
                 id: redeemButton
                 text: root.busy ? "Checking..." : "Start Playing"
                 Layout.fillWidth: true
-                Material.background: "#6b4fd8"
+                Material.background: "#FF1E27"
                 enabled: !root.busy && codeField.text.replace(/[^A-Za-z0-9]/g, "").length === 12
                 onClicked: doRedeem()
             }

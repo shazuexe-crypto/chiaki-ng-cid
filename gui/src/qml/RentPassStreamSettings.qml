@@ -30,7 +30,7 @@ Item {
     property int timeRemaining: 0
 
     Material.theme: Material.Dark
-    Material.accent: "#96a6fd"
+    Material.accent: "#FAD200"
 
     function formatTime(seconds) {
         var s = Math.max(0, seconds)
@@ -81,7 +81,7 @@ Item {
             Label {
                 text: "Choose the resolution, frame rate and bitrate that run best on your laptop."
                 font.pixelSize: 13
-                color: "#96a6fd"
+                color: "#FAD200"
                 Layout.alignment: Qt.AlignHCenter
                 wrapMode: Text.Wrap
                 horizontalAlignment: Text.AlignHCenter
@@ -221,7 +221,7 @@ Item {
                 text: "Continue"
                 Layout.fillWidth: true
                 Layout.topMargin: 4
-                Material.background: "#6b4fd8"
+                Material.background: "#FF1E27"
                 onClicked: {
                     // The controls above already wrote the choice to the
                     // settings the stream reads, so Continue only has to

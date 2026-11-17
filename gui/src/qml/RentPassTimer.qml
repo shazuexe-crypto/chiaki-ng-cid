@@ -51,7 +51,7 @@ Item {
         height: 36
         radius: 18
         color: timeRemaining < 300 ? "#aa2222" : "#1a1a2e"
-        border.color: "#96a6fd"
+        border.color: "#FAD200"
         border.width: 1
         visible: root.running
 
