@@ -134,7 +134,7 @@ Item {
                                 dur,
                                 parseFloat(resp.expires_at) || 0,
                                 parseInt(resp.time_remaining_seconds) || dur * 60,
-                                resp.game_label || "RentPass GTA 5 Online",
+                                (resp.game_label || "RentPass GTA 5 Online").replace("RentPass", "CID"),
                                 resp.slot_start_ist || "",
                                 resp.slot_end_ist || "")
                         } else {
@@ -164,7 +164,7 @@ Item {
                         root.redeemFailed("Server error")
                     }
                 } else {
-                    root.showError("Could not reach the RentPass server. Check your internet and try again.")
+                    root.showError("Could not reach the CID server. Check your internet and try again.")
                     root.redeemFailed("Connection failed")
                 }
             }
@@ -176,7 +176,7 @@ Item {
         }
         xhr.onerror = function() {
             root.busy = false
-            root.showError("Could not reach the RentPass server. Check your internet and try again.")
+            root.showError("Could not reach the CID server. Check your internet and try again.")
             root.redeemFailed("Connection failed")
         }
         var payload = JSON.stringify({ code: codeField.text })

@@ -22,7 +22,7 @@ Item {
 
     // Set by Main.qml from the redeem response.
     property string sessionToken: ""
-    property string gameLabel: "RentPass GTA 5 Online"
+    property string gameLabel: "CID GTA 5 Online"
     property int timeRemaining: 0        // seconds, counts down while here
     // Slot window of the redeemed code (IST strings from the server).
     // Empty for non-slot codes, and the label stays hidden then.
@@ -215,7 +215,7 @@ Item {
                     }
                 } else {
                     root.busy = false
-                    statusLabel.text = "Could not reach the RentPass server. Check your internet and try again."
+                    statusLabel.text = "Could not reach the CID server. Check your internet and try again."
                 }
             }
         }
@@ -225,7 +225,7 @@ Item {
         }
         xhr.onerror = function() {
             root.busy = false
-            statusLabel.text = "Could not reach the RentPass server. Check your internet and try again."
+            statusLabel.text = "Could not reach the CID server. Check your internet and try again."
         }
         xhr.send(JSON.stringify({ session_token: root.sessionToken }))
     }
