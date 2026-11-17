@@ -3052,7 +3052,7 @@ DialogView {
 
                     C.Button {
                         id: aboutButton
-                        text: qsTr("About RentPass")
+                        text: qsTr("About CID")
                         onClicked: aboutDialog.open()
                         Material.roundedScale: Material.SmallScale
                     }
@@ -3113,7 +3113,7 @@ DialogView {
             parent: Overlay.overlay
             x: Math.round((root.width - width) / 2)
             y: Math.round((root.height - height) / 2)
-            title: qsTr("About RentPass")
+            title: qsTr("About CID")
             modal: true
             standardButtons: Dialog.Ok
             Material.roundedScale: Material.MediumScale
@@ -3136,7 +3136,7 @@ DialogView {
                     Layout.preferredWidth: 400
                     verticalAlignment: Text.AlignTop
                     wrapMode: Text.Wrap
-                    text: "<h1>RentPass</h1> version %1
+                    text: "<h1>CID</h1> version %1
                         <p>Based on chiaki-ng by Street Pea.</p>
 
                         <p>This program is free software: you can redistribute it and/or modify

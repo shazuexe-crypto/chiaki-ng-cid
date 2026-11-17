@@ -1044,7 +1044,7 @@ Item {
         ColumnLayout {
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Close RentPass App")
+                text: qsTr("Close CID App")
                 font.bold: true
                 font.pixelSize: 24
             }
@@ -1052,7 +1052,7 @@ Item {
             Label {
                 Layout.topMargin: 10
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Do you want to close the RentPass app?")
+                text: qsTr("Do you want to close the CID app?")
                 font.pixelSize: 20
             }
 
@@ -1152,7 +1152,7 @@ Item {
 
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Close RentPass App")
+                text: qsTr("Close CID App")
                 font.bold: true
                 font.pixelSize: 24
             }
@@ -1160,7 +1160,7 @@ Item {
             Label {
                 Layout.topMargin: 10
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Do you want to close the RentPass app?")
+                text: qsTr("Do you want to close the CID app?")
                 font.pixelSize: 20
             }
 

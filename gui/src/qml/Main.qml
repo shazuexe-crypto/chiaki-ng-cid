@@ -17,7 +17,7 @@ Item {
     // below is the ONLY countdown, so the pre-play screen and the in-stream
     // timer overlay can never drift apart.
     property string rentPassSessionToken: ""
-    property string rentPassGameLabel: "RentPass GTA 5 Online"
+    property string rentPassGameLabel: "CID GTA 5 Online"
     property int rentPassTimeRemaining: 0
     property bool rentPassSessionEnded: false
     // RentPass: slot window of the redeemed code (IST display strings from
@@ -381,7 +381,7 @@ Item {
             spacing: 16
 
             Label {
-                text: "Your RentPass session has ended."
+                text: "Your CID session has ended."
                 font.pixelSize: 24
                 font.bold: true
                 color: "#ffffff"
@@ -389,7 +389,7 @@ Item {
             }
 
             Label {
-                text: "Thank you for playing with RentPass."
+                text: "Thank you for playing with CID."
                 font.pixelSize: 14
                 color: "#96a6fd"
                 Layout.alignment: Qt.AlignHCenter
