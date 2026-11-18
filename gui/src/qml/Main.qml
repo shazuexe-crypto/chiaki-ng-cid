@@ -17,7 +17,7 @@ Item {
     // below is the ONLY countdown, so the pre-play screen and the in-stream
     // timer overlay can never drift apart.
     property string rentPassSessionToken: ""
-    property string rentPassGameLabel: "CID GTA 5 Online"
+    property string rentPassGameLabel: "GTA VI"
     property int rentPassTimeRemaining: 0
     property bool rentPassSessionEnded: false
     // RentPass: slot window of the redeemed code (IST display strings from

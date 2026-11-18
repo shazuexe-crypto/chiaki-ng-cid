@@ -4,9 +4,9 @@
 // manual-host entry, PSN, Steam shortcut, discovery toggle, console list.
 // The console is pre-configured by the installed config file; the Play
 // button authorizes the session with the server FIRST and only then
-// connects to the console. The game label comes from the server redeem
-// response, so changing it to "RentPass GTA 6 Online" later is a
-// server-side change, not an app rebuild. The session countdown is the
+// connects to the console. The game label is fixed to "GTA VI" in the
+// app (Roman numeral VI for 6); the server redeem response's game_label
+// is ignored on this screen. The session countdown is the
 // shared value from Main.qml (root.rentPassTimeRemaining); this view only
 // displays it and does not run its own countdown.
 
@@ -22,7 +22,7 @@ Item {
 
     // Set by Main.qml from the redeem response.
     property string sessionToken: ""
-    property string gameLabel: "CID GTA 5 Online"
+    property string gameLabel: "GTA VI"
     property int timeRemaining: 0        // seconds, counts down while here
     // Slot window of the redeemed code (IST strings from the server).
     // Empty for non-slot codes, and the label stays hidden then.
@@ -69,13 +69,13 @@ Item {
             width: Math.min(parent.width * 0.85, 460)
             spacing: 12
 
-            // RentPass logo (full image, not cropped). This is the brand
-            // mark — there is no "RentPass" text label below it.
+            // GTA 6 artwork (full image, not cropped) — the game art for
+            // this screen, replacing the brand logo here.
             Image {
-                source: "qrc:/icons/rentpass-logo.png"
+                source: "qrc:/icons/gta6-logo.png"
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 120
-                Layout.preferredHeight: 120
+                Layout.preferredWidth: 200
+                Layout.preferredHeight: 150
                 fillMode: Image.PreserveAspectFit
             }
 
